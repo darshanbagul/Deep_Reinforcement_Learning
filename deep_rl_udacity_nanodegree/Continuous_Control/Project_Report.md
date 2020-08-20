@@ -21,19 +21,19 @@ Before training an agent that chooses actions randomly can be seen below:
 ### 2. Implementation
 
 #### Learning Algorithm:
-1. In this implementation we use Deep Deterministic Policy Gradient (DDPG) from  *Actor-Critic Method* as the learning algorithm.
-2. Why this algorithm? Actor critic methods merge the positives from value based methods such as TD Learning (low-variance) and policy based methods such as REINFORCE where the 
+1. In this implementation we use **Deep Deterministic Policy Gradient (DDPG)** from  *Actor-Critic Method* as the learning algorithm.
+2. **Why this algorithm?** Actor critic methods merge the positives from value based methods such as TD Learning (low-variance) and policy based methods such as REINFORCE where the 
   a. Actor is a neural network which updates the policy 
   b. Critic is another neural network which evaluates the policy being learned which is, in turn, used to train the Actor.
 
 3. The DDPG algorithm differs from vanilla Actor-Critic method in way where the actor produces a deterministic policy instead of the usual stochastic policy and 
 the critic evaluates the deterministic policy. The critic is updated using the TD-error and the actor is trained using the deterministic policy gradient algorithm.
 4. For training multiple agents in parallel, we are using 20 agents and updating the network weights every 20 steps.
-5. ***Fixed targets*** - Picked methodology from DQN implementation
-6. ***Soft Updates*** - the target networks are updated using soft updates where during each update step, 0.01% of the local network weights are mixed with the target networks weights, i.e. 99.99% of the target network weights are retained and 0.01% of the local networks weights are added.
-7. ***Experience Replay*** - we maintain a Replay Buffer of fixed size (say N). We run a few episodes and store each of the experiences in the buffer. After a fixed number of iterations, we sample a few experiences from this replay buffer and use that to calculate the loss and eventually update the parameters. This helps remove correlation between sequential experiences.
+5. **Fixed targets** - Picked methodology from DQN implementation
+6. **Soft Updates** - the target networks are updated using soft updates where during each update step, 0.01% of the local network weights are mixed with the target networks weights, i.e. 99.99% of the target network weights are retained and 0.01% of the local networks weights are added.
+7. **Experience Replay** - we maintain a Replay Buffer of fixed size (say N). We run a few episodes and store each of the experiences in the buffer. After a fixed number of iterations, we sample a few experiences from this replay buffer and use that to calculate the loss and eventually update the parameters. This helps remove correlation between sequential experiences.
 8. Based on experience of some peers it seems Leaky ReLu performs a little better in stabilizing the learning than ReLu.
-9. ***Hyperparameter***
+9. **Hyperparameters**
 
 | Hyperparameter                  | Value |
 | --------------------------------| ----- |
@@ -57,12 +57,12 @@ The plot of the rewards across episodes is shown below:
 
 ### 4. Further Improvements
 
-- ***Prioritized Replay*** ([paper](https://arxiv.org/abs/1511.05952)) - expected to improved performance.
+- **Prioritized Replay** ([paper](https://arxiv.org/abs/1511.05952)) - expected to improved performance.
 
-- Algorithms like ***PPO, TRPO, A3C, D4PG*** that have been discussed in the course could potentially lead to better results as well.
+- Algorithms like **PPO, TRPO, A3C, D4PG** that have been discussed in the course could potentially lead to better results as well.
 
-- The ***Q-prop algorithm*** combines both off-policy and on-policy learning; may be useful to try.
+- The **Q-prop algorithm** combines both off-policy and on-policy learning; may be useful to try.
 
-- ***Batch Normalization*** could be added to improve the stability of learning.
+- **Batch Normalization** could be added to improve the stability of learning.
 
-- Deep learning techniques like ***cyclical learning rates*** and warm restarts could be useful as well.
+- Deep learning techniques like **cyclical learning rates** and warm restarts could be useful as well.
