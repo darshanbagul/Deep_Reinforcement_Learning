@@ -1,3 +1,7 @@
+[//]: # (Image References)
+
+[image1]: https://jsideas.net/assets/materials/20190202/reacher_random.gif "Random Agent"
+
 # Project 2 - Continuos Control
 ## Follow a moving Target
 
@@ -12,7 +16,7 @@ Each action is a vector with four numbers, corresponding to torque applicable to
 
 Before training an agent that chooses actions randomly can be seen below:
 
-[image1]: https://user-images.githubusercontent.com/10624937/43851024-320ba930-9aff-11e8-8493-ee547c6af349.gif "Trained Agent"
+![Random Agent][image1]
 
 ### 2. Implementation
 
