@@ -49,13 +49,13 @@ RL is known to be unstable or even to diverge when a nonlinear function approxim
 
 In order to counter this challenge, we implemented the solution suggested by Deepmind. Especially, this implementation includes the 2 major training improvements by [Deepmind](https://deepmind.com) and described in their [Nature publication : "Human-level control through deep reinforcement learning (2015)"](https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf)
 
-- Fixed Q Targets using Target Network
+- __Fixed Q Targets using Target Network__
 
-![Fixed Q Targets](./images/target_network.png)
+    ![Fixed Q Targets](./images/target_network.png)
 
-- Experience Replay
+- __Experience Replay__
 
-![Experienced Replay illustration from David Silver's Course](./images/experience_replay.png)
+    ![Experienced Replay illustration from David Silver's Course](./images/experience_replay.png)
 
 
 ### 3.1.2 Double DQN: 
@@ -68,7 +68,7 @@ DQNs are known to overestimate the value function because of the max operator. T
 
 DQNs have a single output stream with the number of output nodes equal to the number of actions. But this could lead to unnecessarily estimating the value of all the actions for states for states which are clearly bad and where, choosing any action won't matter that much. So, the idea behind dueling networks is to have two output streams, with a shared feature extractor layer. One stream outputs a single scalar value denoting the value function for that state, `V(s)` while the other stream outputs the advantage function for each action in that state `A(a, s)`. The advantage function accounts for the advantage achieved for choosing action `a` . They are combined together using a special aggregrate layer:
 
-  $$ Q (s, a) = V(s) + (A(s, a) - 1/A * mean_a (A (s, a))$$
+$$ Q (s, a) = V(s) + (A(s, a) - 1/A * mean_a (A (s, a))$$
 
 We have implemented all three of these methods, and we can switch between each algorithm by changing the "algo_type" parameter. The Dueling DQN has a different model architecture (two-stream) and is included in model.py.
 
@@ -82,33 +82,32 @@ We train using Epsilon-Greedy policy with Epsilon annealed from 1 to 0.01 with a
 
 We leverage the fact of how DQN was trained in a generalized manner irrespective of the environment. We derive the implementation from the "Lunar Lander" tutorial from the [Deep Reinforcement Learning Nanodegree](https://www.udacity.com/course/deep-reinforcement-learning-nanodegree--nd893), and adjust for being used in banana environment.
 
-Salient points:
+- __Important files__:
 
-Important files:
+    - DQN_Banana_Navigation.ipynb : This Jupyter notebooks allows to launch the game environment, train the RL agent using appropriate algorithm and plot the scores obtained during the learning process.
 
-- DQN_Banana_Navigation.ipynb : This Jupyter notebooks allows to launch the game environment, train the RL agent using appropriate algorithm and plot the scores obtained during the learning process.
+    - dqn_agent.py : Class for DQN agent and a Replay Buffer memory used by the DQN agent are defined in this file.
+        - The DQN agent class is implemented, as described in the Deep Q-Learning algorithm. It provides several methods :
+        - constructor : 
+            - Initialize the memory buffer (*Replay Buffer*)
+            - Initialize 2 instance of the Neural Network : the *target* network and the *local* network
+        - step() : 
+            - Allows to store a step taken by the agent (state, action, reward, next_state, done) in the Replay Buffer/Memory
+            - Every 4 steps (and if their are enough samples available in the Replay Buffer), update the *target* network weights with the current weight values from the *local* network (That's part of the Fixed Q Targets technique)
+        - act() which returns actions for the given state as per current policy (Note : The action selection use an Epsilon-greedy selection so that to balance between *exploration* and *exploitation* for the Q Learning)
+        - learn() which update the Neural Network value parameters using given batch of experiences from the Replay Buffer. 
+        - soft_update() is called by learn() to softly updates the value from the *target* Neural Network from the *local* network weights (That's part of the Fixed Q Targets technique)
+    - The ReplayBuffer class implements a fixed-size buffer to store experience tuples  (state, action, reward, next_state, done) 
+        - add() allows to add an experience step to the memory
+        - sample() allows to randomly sample a batch of experience steps for the learning       
 
-- dqn_agent.py : Class for DQN agent and a Replay Buffer memory used by the DQN agent are defined in this file.
-  - The DQN agent class is implemented, as described in the Deep Q-Learning algorithm. It provides several methods :
-    - constructor : 
-      - Initialize the memory buffer (*Replay Buffer*)
-      - Initialize 2 instance of the Neural Network : the *target* network and the *local* network
-    - step() : 
-      - Allows to store a step taken by the agent (state, action, reward, next_state, done) in the Replay Buffer/Memory
-      - Every 4 steps (and if their are enough samples available in the Replay Buffer), update the *target* network weights with the current weight values from the *local* network (That's part of the Fixed Q Targets technique)
-    - act() which returns actions for the given state as per current policy (Note : The action selection use an Epsilon-greedy selection so that to balance between *exploration* and *exploitation* for the Q Learning)
-    - learn() which update the Neural Network value parameters using given batch of experiences from the Replay Buffer. 
-    - soft_update() is called by learn() to softly updates the value from the *target* Neural Network from the *local* network weights (That's part of the Fixed Q Targets technique)
-  - The ReplayBuffer class implements a fixed-size buffer to store experience tuples  (state, action, reward, next_state, done) 
-    - add() allows to add an experience step to the memory
-    - sample() allows to randomly sample a batch of experience steps for the learning       
+    - model.py : PyTorch QNetwork class definition here. We use a regular fully connected Deep Neural Network using the [PyTorch Framework](https://pytorch.org/docs/0.4.0/). The deep learning model is trained to predict the action to perform depending on the environment observed states. 
 
-- model.py : PyTorch QNetwork class definition here. We use a regular fully connected Deep Neural Network using the [PyTorch Framework](https://pytorch.org/docs/0.4.0/). The deep learning model is trained to predict the action to perform depending on the environment observed states. 
-    - Model architecture details :
-      - the input layer which size depends of the state_size parameter passed in the constructor
-      - 2 hidden fully connected layers of 64 cells each
-      - the output layer which size depends of the action_size parameter passed in the constructor
-      - We use Adam optimizer (learning rate LR=5e-4) for training the Neural network with a BATCH_SIZE=64
+- __Neural Network Model architecture details__ :
+  - the input layer which size depends of the state_size parameter passed in the constructor
+  - 2 hidden fully connected layers of 64 cells each
+  - the output layer which size depends of the action_size parameter passed in the constructor
+  - We use Adam optimizer (learning rate LR=5e-4) for training the Neural network with a BATCH_SIZE=64
 
 ### 3.4 Hyperparameters
 
@@ -131,7 +130,7 @@ Post training we plot the rewards per episode to understand the training phase o
 
 - Scores plot
 
-**1. DQN **
+### 4.1. DQN
 
 ![DQN - Scores plotted across training episode](./images/training_score_plot.png)
 
@@ -140,13 +139,13 @@ We were able to solve the environment in 418 episodes!
 ![Training scores and task completion](./images/completion.png)
 
 
-**2. Double DQN **
+### 4.2. Double DQN
 
 ![Double DQN - Scores plotted across training episode](./images/ddqn_plot.png)
 
 We were able to solve the environment in 446 episodes!
 
-**3. Dueling DQN **
+### 4.3. Dueling DQN
 
 ![Dueling DQN - Scores plotted across training episode](./images/dueling_dqn.png)
 
@@ -155,12 +154,12 @@ We were able to solve the environment in 393 episodes!
 
 ## 5. Future Work
 
-- **Prioritized Replay**: Supposedly showed great improvement over Double DQN performance for Atari games. 
+- __Prioritized Replay__ : Supposedly showed great improvement over Double DQN performance for Atari games. 
 
-- **Improving DQN**: 
+- __Improving DQN__ : 
 
-We learned in this week's lectures extensions to DQN such as **multi-step bootstrap targets , Distributional DQN, Noisy DQN** that potentially improve performance.
+    We learned in this week's lectures extensions to DQN such as **multi-step bootstrap targets , Distributional DQN, Noisy DQN** that potentially improve performance.
 
-- Trying different **loss functions** for training the agent instead of MSE, eg. Huber Loss.
+- Trying different __loss functions__ for training the agent instead of MSE, eg. Huber Loss.
 
-- **Rainbow:** Trying to implement State-of-the-Art Reinforcement Learning algorithm by combining methodologies together.
+- __Rainbow__ : Trying to implement State-of-the-Art Reinforcement Learning algorithm by combining methodologies together.

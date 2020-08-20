@@ -81,7 +81,11 @@ pip install requirements.txt
 
 ### Results
 
-Plot showing the score per episode over all the episodes. The environment was solved in **393** episodes!
+Plot showing the score per episode over all the episodes. The environment was solved in **393** episodes by Dueling DQN!
+
+| DQN                                         | Double DQN                             | Dueling DQN                                         |
+| ------------------------------------------  | ----------------------------------     | --------------------------------------------------- |
+| ![dqn](./images/training_score_plot.png)    | ![double dqn](./images/ddqn_plot.png)  | ![dueling double dqn](./images/dueling_dqn.png)     |
 
 ### (Optional) Challenge: Learning from Pixels
 
