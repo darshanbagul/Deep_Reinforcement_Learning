@@ -52,8 +52,10 @@ the critic evaluates the deterministic policy. The critic is updated using the T
 
 ### 3. Results
 
-The best performance was achieved by **DDPG** where the reward of +30 was achieved in  episodes. 
+The best performance was achieved by **DDPG** where the reward of +30 was achieved in **318** episodes. 
 The plot of the rewards across episodes is shown below:
+
+![trained_scores](images/trained_results.png) 
 
 ### 4. Further Improvements
 
